@@ -16,29 +16,18 @@ namespace EfCoreTestApp.Respitory
         }
         public DbSet<Folder> folder { get; set; }
 
-        public DbSet<Item> items { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
             modelBuilder.Entity<Folder>(entity =>
             {
                 entity
-                    .HasMany(x => x.SubFolders)
-                    .WithOne()
+                    .HasOne(x => x.Parent)
+                    .WithMany(x => x.SubFolders)
                     .HasForeignKey(x => x.ParentId)
                     .IsRequired(false)
                     .OnDelete(DeleteBehavior.Restrict);
             });
-
-            modelBuilder.Entity<Item>()
-                .HasKey(x => x.ItemNo);
-
-            modelBuilder.Entity<Item>()
-                .HasMany(x => x.Children);
-
-
-
         }
 
     }
